@@ -10,6 +10,8 @@ interface Props {
 
 const WorkImage = (props: Props) => {
   const [isVideo, setIsVideo] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [hasError, setHasError] = useState(false);
   const [video, setVideo] = useState("");
   const handleMouseEnter = async () => {
     if (props.video) {
@@ -22,7 +24,7 @@ const WorkImage = (props: Props) => {
   };
 
   return (
-    <div className="work-image">
+    <div className={`work-image ${hasError ? "work-image-error" : ""}`}>
       <a
         className="work-image-in"
         href={props.link}
@@ -36,7 +38,20 @@ const WorkImage = (props: Props) => {
             <MdArrowOutward />
           </div>
         )}
-        <img src={props.image} alt={props.alt} />
+        {isLoading && !hasError && <span className="work-image-status">Loading preview...</span>}
+        {hasError ? (
+          <span className="work-image-status">Preview unavailable</span>
+        ) : (
+          <img
+            src={props.image}
+            alt={props.alt}
+            onLoad={() => setIsLoading(false)}
+            onError={() => {
+              setIsLoading(false);
+              setHasError(true);
+            }}
+          />
+        )}
         {isVideo && <video src={video} autoPlay muted playsInline loop></video>}
       </a>
     </div>

@@ -13,47 +13,37 @@ const setCharacter = (
   dracoLoader.setDecoderPath("/draco/");
   loader.setDRACOLoader(dracoLoader);
 
-  const loadCharacter = () => {
-    return new Promise<GLTF | null>(async (resolve, reject) => {
-      try {
-        const encryptedBlob = await decryptFile(
-          "/models/character.enc",
-          "Character3D#@"
-        );
-        const blobUrl = URL.createObjectURL(new Blob([encryptedBlob]));
+  const loadCharacter = async (): Promise<GLTF | null> => {
+    try {
+      const encryptedBlob = await decryptFile(
+        "/models/character.enc",
+        "Character3D#@"
+      );
+      const blobUrl = URL.createObjectURL(new Blob([encryptedBlob]));
+      const gltf = await new Promise<GLTF>((resolve, reject) => {
+        loader.load(blobUrl, resolve, undefined, reject);
+      });
+      URL.revokeObjectURL(blobUrl);
 
-        let character: THREE.Object3D;
-        loader.load(
-          blobUrl,
-          async (gltf) => {
-            character = gltf.scene;
-            await renderer.compileAsync(character, camera, scene);
-            character.traverse((child: any) => {
-              if (child.isMesh) {
-                const mesh = child as THREE.Mesh;
-                child.castShadow = true;
-                child.receiveShadow = true;
-                mesh.frustumCulled = true;
-              }
-            });
-            resolve(gltf);
-            setCharTimeline(character, camera);
-            setAllTimeline();
-            character!.getObjectByName("footR")!.position.y = 3.36;
-            character!.getObjectByName("footL")!.position.y = 3.36;
-            dracoLoader.dispose();
-          },
-          undefined,
-          (error) => {
-            console.error("Error loading GLTF model:", error);
-            reject(error);
-          }
-        );
-      } catch (err) {
-        reject(err);
-        console.error(err);
-      }
-    });
+      const character = gltf.scene;
+      await renderer.compileAsync(character, camera, scene);
+      character.traverse((child) => {
+        if (child instanceof THREE.Mesh) {
+          child.castShadow = true;
+          child.receiveShadow = true;
+          child.frustumCulled = true;
+        }
+      });
+      setCharTimeline(character, camera);
+      setAllTimeline();
+      character.getObjectByName("footR")!.position.y = 3.36;
+      character.getObjectByName("footL")!.position.y = 3.36;
+      dracoLoader.dispose();
+      return gltf;
+    } catch (error) {
+      console.error("Error loading GLTF model:", error);
+      return null;
+    }
   };
 
   return { loadCharacter };

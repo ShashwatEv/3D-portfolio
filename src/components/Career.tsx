@@ -5,8 +5,8 @@ const Career = () => {
     <div className="career-section section-container">
       <div className="career-container">
         <h2>
-          My career <span>&</span>
-          <br /> experience
+          Education <span>&</span>
+          <br /> credentials
         </h2>
         <div className="career-info">
           <div className="career-timeline">
@@ -15,43 +15,39 @@ const Career = () => {
           <div className="career-info-box">
             <div className="career-info-in">
               <div className="career-role">
-                <h4>Position In Company</h4>
-                <h5>Company Name</h5>
+                <h4>B.Tech Computer Science &amp; Engineering</h4>
+                <h5>Shri Ram Institute of Technology</h5>
               </div>
-              <h3>20XX</h3>
+              <h3>2027</h3>
             </div>
             <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim
-              labore sit non ipsum temporibus quidem, deserunt eaque officiis
-              mollitia ratione suscipit repellat.
+              Jabalpur, MP · Expected graduation. SGPA: 7.83 · CGPA: 6.58
             </p>
           </div>
           <div className="career-info-box">
             <div className="career-info-in">
               <div className="career-role">
-                <h4>Position In Company</h4>
-                <h5>Company Name</h5>
+                <h4>AI Fundamentals with IBM SkillsBuild</h4>
+                <h5>Cisco Networking Academy / IBM</h5>
               </div>
-              <h3>20XX</h3>
+              <h3>BADGE</h3>
             </div>
             <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim
-              labore sit non ipsum temporibus quidem, deserunt eaque officiis
-              mollitia ratione suscipit repellat.
+              Foundations in artificial intelligence and practical machine
+              learning concepts.
             </p>
           </div>
           <div className="career-info-box">
             <div className="career-info-in">
               <div className="career-role">
-                <h4>Position In Company</h4>
-                <h5>Company Name</h5>
+                <h4>Certifications</h4>
+                <h5>Cisco Networking Academy / Python Institute</h5>
               </div>
-              <h3>NOW</h3>
+              <h3>CERTS</h3>
             </div>
             <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim
-              labore sit non ipsum temporibus quidem, deserunt eaque officiis
-              mollitia ratione suscipit repellat.
+              Introduction to Cybersecurity, Python Essentials 1, and Operating
+              Systems Basics.
             </p>
           </div>
         </div>

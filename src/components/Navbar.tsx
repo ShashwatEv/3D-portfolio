@@ -1,14 +1,17 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import HoverLinks from "./HoverLinks";
 import { gsap } from "gsap";
 import { ScrollSmoother } from "gsap-trial/ScrollSmoother";
 import "./styles/Navbar.css";
+import { MdClose, MdMenu } from "react-icons/md";
 
 gsap.registerPlugin(ScrollSmoother, ScrollTrigger);
 export let smoother: ScrollSmoother;
 
 const Navbar = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   useEffect(() => {
     smoother = ScrollSmoother.create({
       wrapper: "#smooth-wrapper",
@@ -23,35 +26,57 @@ const Navbar = () => {
     smoother.scrollTop(0);
     smoother.paused(true);
 
-    let links = document.querySelectorAll(".header ul a");
+    const links = document.querySelectorAll(".header ul a");
+    const navHandlers: Array<{
+      element: HTMLAnchorElement;
+      handler: (event: MouseEvent) => void;
+    }> = [];
     links.forEach((elem) => {
-      let element = elem as HTMLAnchorElement;
-      element.addEventListener("click", (e) => {
+      const element = elem as HTMLAnchorElement;
+      const handleClick = (e: MouseEvent) => {
+        setIsMenuOpen(false);
         if (window.innerWidth > 1024) {
           e.preventDefault();
-          let elem = e.currentTarget as HTMLAnchorElement;
-          let section = elem.getAttribute("data-href");
+          const section = element.getAttribute("data-href");
           smoother.scrollTo(section, true, "top top");
         }
-      });
+      };
+      element.addEventListener("click", handleClick);
+      navHandlers.push({ element, handler: handleClick });
     });
-    window.addEventListener("resize", () => {
+    const handleResize = () => {
       ScrollSmoother.refresh(true);
-    });
+    };
+    window.addEventListener("resize", handleResize);
+    return () => {
+      navHandlers.forEach(({ element, handler }) => {
+        element.removeEventListener("click", handler);
+      });
+      window.removeEventListener("resize", handleResize);
+    };
   }, []);
   return (
     <>
-      <div className="header">
+      <div className={`header ${isMenuOpen ? "menu-open" : ""}`}>
         <a href="/#" className="navbar-title" data-cursor="disable">
-          Logo
+          SSC
         </a>
         <a
-          href="mailto:example@mail.com"
+          href="mailto:shashwatop89@gmail.com"
           className="navbar-connect"
           data-cursor="disable"
         >
-          example@mail.com
+          shashwatop89@gmail.com
         </a>
+        <button
+          className="navbar-menu-toggle"
+          type="button"
+          aria-label={isMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+          aria-expanded={isMenuOpen}
+          onClick={() => setIsMenuOpen((open) => !open)}
+        >
+          {isMenuOpen ? <MdClose /> : <MdMenu />}
+        </button>
         <ul>
           <li>
             <a data-href="#about" href="#about">
