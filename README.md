@@ -53,7 +53,7 @@ Any usage, extraction, or redistribution of that avatar from my live website is 
 
 ---
 
-![Portfolio Preview](portfolio-preview.png)
+![Portfolio Preview](/portfolio-preview.png)
 
 ---
 
