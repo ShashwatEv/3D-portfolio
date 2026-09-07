@@ -25,11 +25,9 @@ Build your own version — don’t just copy.
 
 ## 🛠️ Instructions
 
-I have modified the GSAP Club plugins using trial versions.  
-⚠️ Note: Trial plugins cannot be used for production or hosting.
-
-For official GSAP Club plugins, refer here:  
-https://gsap.com/docs/v3/Installation/
+The portfolio uses the free GSAP core package and ScrollTrigger plugin. Smooth
+navigation uses the browser's native scrolling API, and text animation uses a
+small local text-splitting helper, so no GSAP Club license is required.
 
 ---
 

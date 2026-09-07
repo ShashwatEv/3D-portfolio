@@ -1,14 +1,77 @@
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ScrollSmoother } from "gsap-trial/ScrollSmoother";
-import { SplitText } from "gsap-trial/SplitText";
 
 interface ParaElement extends HTMLElement {
   anim?: gsap.core.Animation;
-  split?: SplitText;
+  split?: TextSplit;
 }
 
-gsap.registerPlugin(ScrollTrigger, ScrollSmoother, SplitText);
+gsap.registerPlugin(ScrollTrigger);
+
+export class TextSplit {
+  chars: HTMLElement[] = [];
+  words: HTMLElement[] = [];
+  private readonly elements: HTMLElement[];
+  private readonly originalMarkup: string[];
+
+  constructor(
+    target: string | Element | Array<string | Element>,
+    options: { type?: string; linesClass?: string } = {}
+  ) {
+    const targets = Array.isArray(target) ? target : [target];
+    this.elements = targets.flatMap((item) => {
+      if (typeof item === "string") {
+        return Array.from(document.querySelectorAll<HTMLElement>(item));
+      }
+      return item instanceof HTMLElement ? [item] : [];
+    });
+    this.originalMarkup = this.elements.map((element) => element.innerHTML);
+
+    if (options.type?.includes("words")) {
+      this.elements.forEach((element) => {
+        this.words.push(...this.wrapWords(element));
+      });
+    } else {
+      this.elements.forEach((element) => {
+        this.chars.push(...this.wrapChars(element));
+      });
+    }
+  }
+
+  revert() {
+    this.elements.forEach((element, index) => {
+      element.innerHTML = this.originalMarkup[index];
+    });
+  }
+
+  private wrapChars(element: HTMLElement) {
+    const text = element.textContent ?? "";
+    element.textContent = "";
+    return Array.from(text).map((char) => {
+      const span = document.createElement("span");
+      span.textContent = char === " " ? "\u00a0" : char;
+      element.appendChild(span);
+      return span;
+    });
+  }
+
+  private wrapWords(element: HTMLElement) {
+    const words = (element.textContent ?? "").split(/(\s+)/);
+    element.textContent = "";
+    return words.reduce<HTMLElement[]>((wrapped, word) => {
+      if (/\s+/.test(word)) {
+        element.appendChild(document.createTextNode(word));
+        return wrapped;
+      }
+      const span = document.createElement("span");
+      span.textContent = word;
+      element.appendChild(span);
+      element.appendChild(document.createTextNode(" "));
+      wrapped.push(span);
+      return wrapped;
+    }, []);
+  }
+}
 
 export default function setSplitText() {
   ScrollTrigger.config({ ignoreMobileResize: true });
@@ -26,7 +89,7 @@ export default function setSplitText() {
       para.split?.revert();
     }
 
-    para.split = new SplitText(para, {
+    para.split = new TextSplit(para, {
       type: "lines,words",
       linesClass: "split-line",
     });
@@ -53,7 +116,7 @@ export default function setSplitText() {
       title.anim.progress(1).kill();
       title.split?.revert();
     }
-    title.split = new SplitText(title, {
+    title.split = new TextSplit(title, {
       type: "chars,lines",
       linesClass: "split-line",
     });
@@ -76,5 +139,4 @@ export default function setSplitText() {
     );
   });
 
-  ScrollTrigger.addEventListener("refresh", () => setSplitText());
 }

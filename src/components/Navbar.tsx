@@ -2,30 +2,15 @@ import { useEffect, useState } from "react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import HoverLinks from "./HoverLinks";
 import { gsap } from "gsap";
-import { ScrollSmoother } from "gsap-trial/ScrollSmoother";
 import "./styles/Navbar.css";
 import { MdClose, MdMenu } from "react-icons/md";
 
-gsap.registerPlugin(ScrollSmoother, ScrollTrigger);
-export let smoother: ScrollSmoother;
+gsap.registerPlugin(ScrollTrigger);
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
-    smoother = ScrollSmoother.create({
-      wrapper: "#smooth-wrapper",
-      content: "#smooth-content",
-      smooth: 1.7,
-      speed: 1.7,
-      effects: true,
-      autoResize: true,
-      ignoreMobileResize: true,
-    });
-
-    smoother.scrollTop(0);
-    smoother.paused(true);
-
     const links = document.querySelectorAll(".header ul a");
     const navHandlers: Array<{
       element: HTMLAnchorElement;
@@ -38,14 +23,17 @@ const Navbar = () => {
         if (window.innerWidth > 1024) {
           e.preventDefault();
           const section = element.getAttribute("data-href");
-          smoother.scrollTo(section, true, "top top");
+          document.querySelector(section ?? "")?.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
         }
       };
       element.addEventListener("click", handleClick);
       navHandlers.push({ element, handler: handleClick });
     });
     const handleResize = () => {
-      ScrollSmoother.refresh(true);
+      ScrollTrigger.refresh();
     };
     window.addEventListener("resize", handleResize);
     return () => {
