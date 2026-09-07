@@ -45,14 +45,28 @@ export class TextSplit {
   }
 
   private wrapChars(element: HTMLElement) {
-    const text = element.textContent ?? "";
-    element.textContent = "";
-    return Array.from(text).map((char) => {
-      const span = document.createElement("span");
-      span.textContent = char === " " ? "\u00a0" : char;
-      element.appendChild(span);
-      return span;
+    const chars: HTMLElement[] = [];
+    const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
+    const textNodes: Text[] = [];
+    let node = walker.nextNode();
+    while (node) {
+      textNodes.push(node as Text);
+      node = walker.nextNode();
+    }
+
+    textNodes.forEach((textNode) => {
+      const fragment = document.createDocumentFragment();
+      Array.from(textNode.textContent ?? "").forEach((char) => {
+        const span = document.createElement("span");
+        span.style.display = "inline-block";
+        span.textContent = char === " " ? "\u00a0" : char;
+        fragment.appendChild(span);
+        chars.push(span);
+      });
+      textNode.parentNode?.replaceChild(fragment, textNode);
     });
+
+    return chars;
   }
 
   private wrapWords(element: HTMLElement) {
@@ -64,6 +78,7 @@ export class TextSplit {
         return wrapped;
       }
       const span = document.createElement("span");
+      span.style.display = "inline-block";
       span.textContent = word;
       element.appendChild(span);
       element.appendChild(document.createTextNode(" "));
