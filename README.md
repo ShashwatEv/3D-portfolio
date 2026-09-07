@@ -51,12 +51,6 @@ However:
 
 Any usage, extraction, or redistribution of that avatar from my live website is strictly prohibited.
 
----
-
-![Portfolio Preview](/portfolio-preview.png)
-
----
-
 ## 📄 License
 
 This project is licensed under the Personal Portfolio License (PPL) v1.0.
