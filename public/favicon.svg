@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="SSC portfolio icon">
+  <defs>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#e0c9ff"/>
+      <stop offset="1" stop-color="#9f63ff"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="#0b080c"/>
+  <path d="M18 20c0-3 3-5 8-5h13c5 0 8 2 8 6s-3 6-8 6H29c-3 0-4 1-4 3s1 3 4 3h10c7 0 11 4 11 9s-4 7-11 7H26c-5 0-8-2-8-6s3-6 8-6h11c3 0 4-1 4-3s-1-3-4-3H26c-6 0-8-4-8-11Z" fill="url(#accent)"/>
+  <path d="M13 12h38M13 52h38" stroke="#c2a4ff" stroke-width="2" opacity=".45"/>
+</svg>
